@@ -1,21 +1,22 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { colors, typography, spacing } from './theme';
 
-const TABS = [
-  { label: 'Courses', icon: '🛒' },
-  { label: 'Accueil', icon: '🏠' },
-  { label: 'Recettes', icon: '📖' },
-] as const;
+export type TabDef = {
+  label: string;
+  icon: string;
+  activeColor: string;
+};
 
 interface TabBarProps {
+  tabs: TabDef[];
   activeTab: number;
   onSwitch: (index: number) => void;
 }
 
-export function TabBar({ activeTab, onSwitch }: TabBarProps) {
+export function TabBar({ tabs, activeTab, onSwitch }: TabBarProps) {
   return (
     <View style={styles.container}>
-      {TABS.map((tab, i) => {
+      {tabs.map((tab, i) => {
         const active = i === activeTab;
         return (
           <Pressable
@@ -23,9 +24,11 @@ export function TabBar({ activeTab, onSwitch }: TabBarProps) {
             style={({ pressed }) => [styles.tab, pressed && !active && styles.tabPressed]}
             onPress={() => { if (!active) onSwitch(i); }}
           >
-            {active && <View style={styles.activeIndicator} />}
+            {active && <View style={[styles.activeIndicator, { backgroundColor: tab.activeColor }]} />}
             <Text style={styles.icon}>{tab.icon}</Text>
-            <Text style={[styles.label, active && styles.labelActive]}>{tab.label}</Text>
+            <Text style={[styles.label, active && { fontWeight: typography.fontWeights.bold, color: tab.activeColor }]}>
+              {tab.label}
+            </Text>
           </Pressable>
         );
       })}
@@ -56,7 +59,6 @@ const styles = StyleSheet.create({
     left: '20%',
     right: '20%',
     height: 2,
-    backgroundColor: colors.primary,
     borderBottomLeftRadius: 2,
     borderBottomRightRadius: 2,
   },
@@ -67,9 +69,5 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSizes.xs,
     fontWeight: typography.fontWeights.medium,
     color: colors.textSecondary,
-  },
-  labelActive: {
-    fontWeight: typography.fontWeights.bold,
-    color: colors.primary,
   },
 });

@@ -6,7 +6,6 @@ import { colors } from '../lib/theme';
 initDatabase();
 
 export default function RootLayout() {
-
   return (
     <>
       <StatusBar style="light" />
@@ -19,6 +18,8 @@ export default function RootLayout() {
         }}
       >
         <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="planning" options={{ headerShown: false }} />
+        <Stack.Screen name="maison" options={{ headerShown: false }} />
         <Stack.Screen name="recipe/[id]" options={{ title: 'Recette' }} />
       </Stack>
     </>

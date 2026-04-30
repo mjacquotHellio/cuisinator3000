@@ -1,5 +1,5 @@
 // ============================================================
-// theme.ts — Design System Cuisinator 3000
+// theme.ts — Design System Maisontator 3000
 // ============================================================
 
 import React from 'react';
@@ -22,6 +22,8 @@ export const colors = {
   border: '#E8E8E6',
   primaryLight: '#FFF0EA',  // Orange très clair — fond emoji
   successLight: '#E8F5E9',  // Vert très clair — fond emoji alternatif
+  house: '#5B8DB8',         // Bleu ardoise — univers Maison
+  houseLight: '#EBF2F8',    // Bleu très clair — fond icônes Maison
 } as const;
 
 // ─── Typographie ─────────────────────────────────────────────
