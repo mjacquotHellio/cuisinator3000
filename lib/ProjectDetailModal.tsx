@@ -24,7 +24,7 @@ import {
   type RoomTaskPriority,
   type RoomShoppingItem,
 } from './database';
-import { colors, typography, spacing, radii, shadows } from './theme';
+import { colors, fonts, typography, spacing, radii, shadows } from './theme';
 
 // ─── Config ───────────────────────────────────────────────────
 
@@ -482,10 +482,12 @@ const modalStyles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingTop: spacing.lg,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.xxxxl,
     paddingHorizontal: spacing.xl,
     flexDirection: 'row',
     alignItems: 'flex-start',
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
   },
   backBtn: { paddingTop: spacing.xs, width: 60 },
   backText: {
@@ -501,10 +503,10 @@ const modalStyles = StyleSheet.create({
     fontWeight: typography.fontWeights.medium,
   },
   headerTitle: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 24,
+    fontFamily: fonts.display,
     color: colors.surface,
-    letterSpacing: -0.3,
+    lineHeight: 30,
     textAlign: 'center',
   },
   headerDesc: {

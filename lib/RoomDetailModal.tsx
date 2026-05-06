@@ -20,7 +20,7 @@ import {
   type Room,
   type RoomProject,
 } from './database';
-import { colors, typography, spacing, radii, shadows } from './theme';
+import { colors, fonts, typography, spacing, radii, shadows } from './theme';
 import { ProjectDetailModal } from './ProjectDetailModal';
 
 type ProjectWithCounts = RoomProject & { total: number; done: number };
@@ -313,10 +313,12 @@ const styles = StyleSheet.create({
 
   header: {
     paddingTop: spacing.lg,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.xxxxl,
     paddingHorizontal: spacing.xl,
     flexDirection: 'row',
     alignItems: 'flex-start',
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
   },
   backBtn: { paddingTop: spacing.xs },
   backText: {
@@ -328,10 +330,10 @@ const styles = StyleSheet.create({
   headerCenter: { flex: 1, alignItems: 'center' },
   headerIcon: { fontSize: 36, marginBottom: spacing.xs },
   headerTitle: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 26,
+    fontFamily: fonts.display,
     color: colors.surface,
-    letterSpacing: -0.3,
+    lineHeight: 32,
   },
   headerSub: {
     fontSize: typography.fontSizes.sm,
@@ -444,8 +446,9 @@ const styles = StyleSheet.create({
   projectTitle: {
     flex: 1,
     fontSize: typography.fontSizes.lg,
-    fontWeight: typography.fontWeights.bold,
+    fontFamily: fonts.display,
     color: colors.textPrimary,
+    lineHeight: 22,
   },
   editProjectBtn: {
     width: 26,

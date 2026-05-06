@@ -54,7 +54,7 @@ export default function MaisonScreen() {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <StatusBar barStyle="light-content" backgroundColor={colors.dark} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.house} />
       <View style={styles.container}>
         <Animated.View
           style={[styles.panelRow, { width: width * 3, transform: [{ translateX }] }]}

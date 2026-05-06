@@ -20,7 +20,7 @@ import {
   addToShoppingList,
 } from '../database';
 import type { ShoppingItem } from '../database';
-import { colors, typography, spacing, radii, shadows } from '../theme';
+import { colors, fonts, typography, spacing, radii, shadows } from '../theme';
 import { useAppAlert } from '../AppAlert';
 
 // ─── Rayons supermarché ───────────────────────────────────────
@@ -486,10 +486,12 @@ const s = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: colors.dark,
-    paddingBottom: spacing.lg,
+    backgroundColor: colors.primary,
+    paddingBottom: spacing.xxxxl,
     paddingHorizontal: spacing.xl,
     gap: spacing.lg,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   headerTop: {
     flexDirection: 'row',
@@ -497,17 +499,18 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerTitle: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 28,
+    fontFamily: fonts.display,
     color: colors.surface,
+    lineHeight: 34,
   },
   headerSub: {
     fontSize: typography.fontSizes.sm,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
+    color: 'rgba(255,255,255,0.65)',
+    marginTop: 2,
   },
   clearBtn: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: 'rgba(255,255,255,0.22)',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     borderRadius: radii.full,
@@ -515,11 +518,11 @@ const s = StyleSheet.create({
   clearBtnText: {
     fontSize: typography.fontSizes.sm,
     fontWeight: typography.fontWeights.semiBold,
-    color: '#2E7D32',
+    color: colors.surface,
   },
   toggle: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: radii.full,
     padding: 3,
   },
@@ -529,17 +532,19 @@ const s = StyleSheet.create({
     borderRadius: radii.full,
     alignItems: 'center',
   },
-  toggleBtnActive: { backgroundColor: colors.primary },
+  toggleBtnActive: { backgroundColor: 'rgba(255,255,255,0.9)' },
   toggleText: {
     fontSize: typography.fontSizes.sm,
     fontWeight: typography.fontWeights.semiBold,
-    color: colors.textSecondary,
+    color: 'rgba(255,255,255,0.7)',
   },
-  toggleTextActive: { color: colors.surface },
+  toggleTextActive: { color: colors.primary },
   list: {
     padding: spacing.lg,
+    paddingTop: spacing.md,
     gap: spacing.lg,
     paddingBottom: spacing.xxxxl,
+    marginTop: -spacing.xl,
   },
   group: {
     backgroundColor: colors.surface,

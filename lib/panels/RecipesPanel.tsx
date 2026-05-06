@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getAllRecipes, type Recipe } from '../database';
-import { colors, typography, spacing, radii, shadows, Badge } from '../theme';
+import { colors, fonts, typography, spacing, radii, shadows, Badge } from '../theme';
 import { ImportModal } from '../ImportModal';
 
 // ─── Helpers ──────────────────────────────────────────────────
@@ -26,7 +26,13 @@ const CATEGORY_EMOJI: Record<string, string> = {
 const EMOJI_BG: Record<string, string> = {
   Entrée: colors.successLight,
   Plat: colors.primaryLight,
-  Dessert: colors.primaryLight,
+  Dessert: '#F5E8FF',
+};
+
+const CATEGORY_ACCENT: Record<string, string> = {
+  Entrée: colors.success,
+  Plat: colors.primary,
+  Dessert: '#9B59B6',
 };
 
 function getBadge(recipe: Recipe): { label: string; color: string } {
@@ -40,9 +46,11 @@ function getBadge(recipe: Recipe): { label: string; color: string } {
 function RecipeCard({ recipe, onPress }: { recipe: Recipe; onPress: () => void }) {
   const emoji = CATEGORY_EMOJI[recipe.category] ?? '🍴';
   const emojiBg = EMOJI_BG[recipe.category] ?? colors.primaryLight;
+  const accent = CATEGORY_ACCENT[recipe.category] ?? colors.primary;
   const badge = getBadge(recipe);
   return (
     <TouchableOpacity style={s.card} onPress={onPress} activeOpacity={0.7}>
+      <View style={[s.cardAccent, { backgroundColor: accent }]} />
       <View style={[s.emojiBox, { backgroundColor: emojiBg }]}>
         <Text style={s.emojiText}>{emoji}</Text>
       </View>
@@ -170,18 +178,20 @@ const s = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: colors.dark,
+    backgroundColor: colors.primary,
     paddingHorizontal: spacing.xl,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.xxxxl,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   headerTitle: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 28,
+    fontFamily: fonts.display,
     color: colors.surface,
-    letterSpacing: -0.5,
+    lineHeight: 34,
   },
   headerBtns: {
     flexDirection: 'row',
@@ -190,7 +200,7 @@ const s = StyleSheet.create({
     marginBottom: 2,
   },
   importBtn: {
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,255,255,0.22)',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs + 2,
     borderRadius: radii.full,
@@ -199,22 +209,24 @@ const s = StyleSheet.create({
     color: colors.surface,
     fontSize: typography.fontSizes.sm,
     fontWeight: typography.fontWeights.semiBold,
+    letterSpacing: 0.2,
   },
   searchContainer: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,
     paddingBottom: spacing.sm,
+    marginTop: -spacing.xl,
   },
   searchInput: {
     backgroundColor: colors.surface,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md - 2,
     fontSize: typography.fontSizes.md,
     borderWidth: 1,
     borderColor: colors.border,
     color: colors.textPrimary,
-    ...shadows.sm,
+    ...shadows.md,
   },
   filterRow: {
     flexDirection: 'row',
@@ -260,23 +272,33 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: spacing.md,
+    paddingLeft: spacing.md + spacing.xs,
     gap: spacing.md,
+    overflow: 'hidden',
     ...shadows.md,
   },
+  cardAccent: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+  },
   emojiBox: {
-    width: 52,
-    height: 52,
+    width: 50,
+    height: 50,
     borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
-  emojiText: { fontSize: 26 },
+  emojiText: { fontSize: 24 },
   cardBody: { flex: 1, gap: spacing.xs },
   cardTitle: {
     fontSize: typography.fontSizes.lg,
-    fontWeight: typography.fontWeights.bold,
+    fontFamily: fonts.display,
     color: colors.textPrimary,
+    lineHeight: 22,
   },
   cardMetaRow: {
     flexDirection: 'row',
