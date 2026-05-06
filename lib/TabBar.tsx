@@ -1,4 +1,5 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, typography, spacing } from './theme';
 
 export type TabDef = {
@@ -14,8 +15,9 @@ interface TabBarProps {
 }
 
 export function TabBar({ tabs, activeTab, onSwitch }: TabBarProps) {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       {tabs.map((tab, i) => {
         const active = i === activeTab;
         return (

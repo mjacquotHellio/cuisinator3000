@@ -3,16 +3,17 @@ import {
   View,
   Text,
   Modal,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   TextInput,
   StyleSheet,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   getProjects,
   addProject,
+  updateProject,
   deleteProject,
   deleteRoom,
   getProjectTaskCounts,
@@ -38,6 +39,11 @@ export function RoomDetailModal({ visible, room, onClose, onGotoBoard }: RoomDet
   const [newDesc, setNewDesc] = useState('');
   const [selectedProject, setSelectedProject] = useState<RoomProject | null>(null);
 
+  // État pour l'édition d'un projet existant
+  const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDesc, setEditDesc] = useState('');
+
   const loadProjects = useCallback(() => {
     const ps = getProjects(room.id);
     setProjects(ps.map((p) => ({ ...p, ...getProjectTaskCounts(p.id) })));
@@ -50,6 +56,7 @@ export function RoomDetailModal({ visible, room, onClose, onGotoBoard }: RoomDet
       setNewTitle('');
       setNewDesc('');
       setSelectedProject(null);
+      setEditingProjectId(null);
     }
   }, [visible, loadProjects]);
 
@@ -64,6 +71,19 @@ export function RoomDetailModal({ visible, room, onClose, onGotoBoard }: RoomDet
     setNewTitle('');
     setNewDesc('');
     setShowForm(false);
+    loadProjects();
+  }
+
+  function handleStartEdit(project: RoomProject) {
+    setEditingProjectId(project.id);
+    setEditTitle(project.title);
+    setEditDesc(project.description || '');
+  }
+
+  function handleSaveEdit() {
+    if (!editTitle.trim() || !editingProjectId) return;
+    updateProject(editingProjectId, { title: editTitle.trim(), description: editDesc.trim() });
+    setEditingProjectId(null);
     loadProjects();
   }
 
@@ -161,6 +181,44 @@ export function RoomDetailModal({ visible, room, onClose, onGotoBoard }: RoomDet
 
           {/* Cartes de projets */}
           {projects.map((project) => {
+            // Mode édition inline
+            if (editingProjectId === project.id) {
+              return (
+                <View key={project.id} style={styles.form}>
+                  <Text style={styles.formTitle}>Modifier le projet</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Titre du projet..."
+                    placeholderTextColor={colors.textSecondary}
+                    value={editTitle}
+                    onChangeText={setEditTitle}
+                    autoFocus
+                  />
+                  <TextInput
+                    style={[styles.input, styles.inputMulti]}
+                    placeholder="Description (optionnel)..."
+                    placeholderTextColor={colors.textSecondary}
+                    value={editDesc}
+                    onChangeText={setEditDesc}
+                    multiline
+                    numberOfLines={2}
+                  />
+                  <View style={styles.formActions}>
+                    <TouchableOpacity style={styles.cancelBtn} onPress={() => setEditingProjectId(null)}>
+                      <Text style={styles.cancelText}>Annuler</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.saveBtn, { backgroundColor: room.color }, !editTitle.trim() && styles.saveBtnDisabled]}
+                      onPress={handleSaveEdit}
+                      disabled={!editTitle.trim()}
+                    >
+                      <Text style={styles.saveBtnText}>Sauvegarder</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            }
+
             const progress = project.total > 0 ? project.done / project.total : 0;
             const isDone = project.total > 0 && project.done === project.total;
             return (
@@ -174,6 +232,13 @@ export function RoomDetailModal({ visible, room, onClose, onGotoBoard }: RoomDet
                 <View style={styles.projectCardBody}>
                   <View style={styles.projectCardTop}>
                     <Text style={styles.projectTitle} numberOfLines={1}>{project.title}</Text>
+                    <TouchableOpacity
+                      onPress={() => handleStartEdit(project)}
+                      style={styles.editProjectBtn}
+                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    >
+                      <Text style={styles.editProjectIcon}>✎</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => handleDeleteProject(project.id)}
                       style={styles.deleteProjectBtn}
@@ -212,7 +277,7 @@ export function RoomDetailModal({ visible, room, onClose, onGotoBoard }: RoomDet
         </ScrollView>
 
         {/* Footer */}
-        {!showForm && (
+        {!showForm && !editingProjectId && (
           <View style={styles.footer}>
             <TouchableOpacity
               style={[styles.addBtn, { backgroundColor: room.color }]}
@@ -381,6 +446,19 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSizes.lg,
     fontWeight: typography.fontWeights.bold,
     color: colors.textPrimary,
+  },
+  editProjectBtn: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: colors.houseLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  editProjectIcon: {
+    fontSize: 13,
+    color: colors.house,
+    fontWeight: typography.fontWeights.bold,
   },
   deleteProjectBtn: {
     width: 24,

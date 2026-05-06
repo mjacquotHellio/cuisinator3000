@@ -327,6 +327,10 @@ export function updateRoomTaskShoppingItems(id: number, items: RoomShoppingItem[
   db.runSync('UPDATE room_tasks SET shopping_items = ? WHERE id = ?;', [JSON.stringify(items), id]);
 }
 
+export function updateRoomTask(id: number, updates: { title: string; priority: RoomTaskPriority; note: string }): void {
+  db.runSync('UPDATE room_tasks SET title=?, priority=?, note=? WHERE id=?;', [updates.title, updates.priority, updates.note, id]);
+}
+
 export function deleteRoomTask(id: number): void {
   db.runSync('DELETE FROM room_tasks WHERE id = ?;', [id]);
 }
@@ -372,6 +376,10 @@ export function addProject(project: Omit<RoomProject, 'id'>): void {
     'INSERT INTO room_projects (room_id, title, description, created_at) VALUES (?, ?, ?, ?);',
     [project.room_id, project.title, project.description, project.created_at]
   );
+}
+
+export function updateProject(id: number, updates: { title: string; description: string }): void {
+  db.runSync('UPDATE room_projects SET title=?, description=? WHERE id=?;', [updates.title, updates.description, id]);
 }
 
 export function deleteProject(id: number): void {
