@@ -82,3 +82,13 @@ export type RoomTask = {
   shopping_items: string; // JSON: RoomShoppingItem[]
   created_at: string;
 };
+
+// ─── Sport ────────────────────────────────────────────────────
+
+export type SportSession = {
+  date: string;        // YYYY-MM-DD, clé primaire
+  push_ups: number;
+  knee_push_ups: number;
+  abs: number;
+  total_time: number;  // minutes
+};

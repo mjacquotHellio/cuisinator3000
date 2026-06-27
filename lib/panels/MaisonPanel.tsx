@@ -223,7 +223,7 @@ export function MaisonPanel({ width, isFocused, focusKey, onGotoBoard }: MaisonP
       {/* Header */}
       <View style={[styles.header, { paddingTop: insets.top + spacing.xl }]}>
         <View style={styles.headerContent}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.replace('/')} style={styles.backBtn} activeOpacity={0.7}>
             <Text style={styles.backBtnText}>🏠</Text>
           </TouchableOpacity>
           <View style={styles.headerText}>

@@ -3,7 +3,7 @@ import { SEED_RECIPES, toDbFormat } from './data/recipes';
 export type { ImportResult } from './data/importRecipes';
 
 // ─── Re-exports des types ──────────────────────────────────────
-export type { StepType, RecipeStep, Recipe, Ingredient, ShoppingItem, MealSlot, MealPlan, Room, RoomProject, RoomTask, RoomTaskType, RoomTaskStatus, RoomTaskPriority, RoomShoppingItem } from './types';
+export type { StepType, RecipeStep, Recipe, Ingredient, ShoppingItem, MealSlot, MealPlan, Room, RoomProject, RoomTask, RoomTaskType, RoomTaskStatus, RoomTaskPriority, RoomShoppingItem, SportSession } from './types';
 
 // ─── Init ─────────────────────────────────────────────────────
 
@@ -74,6 +74,16 @@ export function initDatabase() {
       title TEXT NOT NULL,
       description TEXT NOT NULL DEFAULT '',
       created_at TEXT NOT NULL
+    );
+  `);
+
+  db.execSync(`
+    CREATE TABLE IF NOT EXISTS sport_sessions (
+      date TEXT PRIMARY KEY,
+      push_ups INTEGER NOT NULL DEFAULT 0,
+      knee_push_ups INTEGER NOT NULL DEFAULT 0,
+      abs INTEGER NOT NULL DEFAULT 0,
+      total_time INTEGER NOT NULL DEFAULT 0
     );
   `);
 
@@ -396,4 +406,23 @@ export function getProjectTaskCounts(projectId: number): { total: number; done: 
     [projectId, 'done']
   );
   return { total: total?.count ?? 0, done: done?.count ?? 0 };
+}
+
+// ─── Sport ────────────────────────────────────────────────────
+
+import type { SportSession } from './types';
+
+export function getSportSession(date: string): SportSession | null {
+  return db.getFirstSync<SportSession>('SELECT * FROM sport_sessions WHERE date = ?;', [date]) ?? null;
+}
+
+export function setSportSession(session: SportSession): void {
+  db.runSync(
+    'INSERT OR REPLACE INTO sport_sessions (date, push_ups, knee_push_ups, abs, total_time) VALUES (?, ?, ?, ?, ?);',
+    [session.date, session.push_ups, session.knee_push_ups, session.abs, session.total_time]
+  );
+}
+
+export function getAllSportSessions(): SportSession[] {
+  return db.getAllSync<SportSession>('SELECT * FROM sport_sessions ORDER BY date DESC;');
 }

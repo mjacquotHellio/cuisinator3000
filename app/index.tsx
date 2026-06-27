@@ -3,6 +3,8 @@ import { useRouter, Stack } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, typography, spacing, radii, shadows } from '../lib/theme';
 
+const SPORT_GREEN = '#22C55E';
+
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -44,6 +46,21 @@ export default function HomeScreen() {
             <View style={styles.cardBody}>
               <Text style={[styles.cardTitle, { color: colors.house }]}>Ma Maison</Text>
               <Text style={styles.cardSub}>Tâches et achats par pièce</Text>
+            </View>
+            <Text style={styles.chevron}>›</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.card, styles.cardSport]}
+            onPress={() => router.push('/sport')}
+            activeOpacity={0.82}
+          >
+            <View style={[styles.cardIconBox, styles.cardIconBoxSport]}>
+              <Text style={styles.cardEmoji}>🏋️</Text>
+            </View>
+            <View style={styles.cardBody}>
+              <Text style={[styles.cardTitle, { color: SPORT_GREEN }]}>Sport</Text>
+              <Text style={styles.cardSub}>Suivi de tes performances</Text>
             </View>
             <Text style={styles.chevron}>›</Text>
           </TouchableOpacity>
@@ -98,6 +115,10 @@ const styles = StyleSheet.create({
     borderLeftWidth: 3,
     borderLeftColor: colors.house,
   },
+  cardSport: {
+    borderLeftWidth: 3,
+    borderLeftColor: '#22C55E',
+  },
   cardIconBox: {
     width: 56,
     height: 56,
@@ -111,6 +132,9 @@ const styles = StyleSheet.create({
   },
   cardIconBoxMaison: {
     backgroundColor: colors.house + '22',
+  },
+  cardIconBoxSport: {
+    backgroundColor: '#22C55E22',
   },
   cardEmoji: {
     fontSize: 26,

@@ -4,7 +4,7 @@ import { parseImportJson, type ImportResult } from './data/importRecipes';
 export type { ImportResult };
 
 // ─── Re-exports des types ──────────────────────────────────────
-export type { StepType, RecipeStep, Recipe, Ingredient, ShoppingItem, MealSlot, MealPlan, Room, RoomProject, RoomTask, RoomTaskType, RoomTaskStatus, RoomTaskPriority, RoomShoppingItem } from './types';
+export type { StepType, RecipeStep, Recipe, Ingredient, ShoppingItem, MealSlot, MealPlan, Room, RoomProject, RoomTask, RoomTaskType, RoomTaskStatus, RoomTaskPriority, RoomShoppingItem, SportSession } from './types';
 
 // ─── Init ─────────────────────────────────────────────────────
 
@@ -331,6 +331,37 @@ export type RoomShoppingEntry = {
   taskTitle: string;
   items: RoomShoppingItem[];
 };
+
+// ─── Sport ────────────────────────────────────────────────────
+
+import type { SportSession } from './types';
+
+const SPORT_SESSIONS_KEY = 'cuisinator_sport_sessions';
+
+function loadSportSessions(): SportSession[] {
+  try {
+    const raw = localStorage.getItem(SPORT_SESSIONS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveSportSessions(sessions: SportSession[]): void {
+  localStorage.setItem(SPORT_SESSIONS_KEY, JSON.stringify(sessions));
+}
+
+export function getSportSession(date: string): SportSession | null {
+  return loadSportSessions().find((s) => s.date === date) ?? null;
+}
+
+export function setSportSession(session: SportSession): void {
+  const sessions = loadSportSessions().filter((s) => s.date !== session.date);
+  sessions.push(session);
+  saveSportSessions(sessions);
+}
+
+export function getAllSportSessions(): SportSession[] {
+  return loadSportSessions().sort((a, b) => b.date.localeCompare(a.date));
+}
 
 export function getAllRoomShoppingItems(): RoomShoppingEntry[] {
   const rooms = loadRooms();
