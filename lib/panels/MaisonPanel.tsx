@@ -7,7 +7,7 @@ import {
   getRoomTaskCounts,
   type Room,
 } from '../database';
-import { colors, typography, spacing, radii, shadows } from '../theme';
+import { colors, fonts, typography, spacing, radii, shadows } from '../theme';
 import { RoomDetailModal } from '../RoomDetailModal';
 
 // ─── Plan de maison — coordonnées virtuelles 800×500 ──────────
@@ -280,9 +280,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: colors.dark,
+    backgroundColor: colors.house,
     paddingHorizontal: spacing.xl,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.xxxxl,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   headerContent: {
     flexDirection: 'row',
@@ -293,7 +295,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -305,18 +307,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerTitle: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 26,
+    fontFamily: fonts.display,
     color: colors.surface,
-    letterSpacing: -0.5,
+    lineHeight: 32,
   },
   headerSub: {
     fontSize: typography.fontSizes.sm,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
+    color: 'rgba(255,255,255,0.65)',
+    marginTop: 2,
   },
   headerBadge: {
-    backgroundColor: colors.house,
+    backgroundColor: 'rgba(255,255,255,0.18)',
     borderRadius: radii.full,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
@@ -331,14 +333,14 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 3,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: radii.full,
     marginTop: spacing.lg,
     overflow: 'hidden',
   },
   progressFill: {
     height: 3,
-    backgroundColor: colors.house,
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: radii.full,
   },
   body: {

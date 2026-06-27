@@ -10,20 +10,25 @@ import {
   ViewStyle,
 } from 'react-native';
 
+// ─── Polices ──────────────────────────────────────────────────
+export const fonts = {
+  display: 'PlayfairDisplay_700Bold',
+} as const;
+
 // ─── Couleurs ────────────────────────────────────────────────
 export const colors = {
-  primary: '#FF6B35',       // Orange tangerine — CTA, boutons
-  dark: '#1D1D1B',          // Anthracite — header, titres
-  background: '#F8F7F5',    // Blanc cassé — fond général
+  primary: '#C74B2B',       // Terracotta — CTA, boutons
+  dark: '#1A1208',          // Espresso brun — header, titres
+  background: '#FAF6F0',    // Crème chaude — fond général
   surface: '#FFFFFF',       // Blanc pur — cartes
-  success: '#4CAF50',       // Vert — badges, étapes
-  textPrimary: '#1D1D1B',
-  textSecondary: '#888888',
-  border: '#E8E8E6',
-  primaryLight: '#FFF0EA',  // Orange très clair — fond emoji
-  successLight: '#E8F5E9',  // Vert très clair — fond emoji alternatif
-  house: '#5B8DB8',         // Bleu ardoise — univers Maison
-  houseLight: '#EBF2F8',    // Bleu très clair — fond icônes Maison
+  success: '#4A7C59',       // Vert forêt — badges, étapes
+  textPrimary: '#1A1208',
+  textSecondary: '#9A7E6E', // Taupe chaud
+  border: '#EDE5D8',
+  primaryLight: '#FAEEE9',  // Terracotta très clair — fond emoji
+  successLight: '#EBF3EE',  // Vert très clair — fond emoji alternatif
+  house: '#4A6FA5',         // Bleu ardoise — univers Maison
+  houseLight: '#EBF0F8',    // Bleu très clair — fond icônes Maison
 } as const;
 
 // ─── Typographie ─────────────────────────────────────────────
@@ -69,27 +74,28 @@ export const radii = {
   md: 12,
   lg: 16,
   xl: 20,
+  xxl: 28,
   full: 999,
 } as const;
 
 // ─── Ombres ───────────────────────────────────────────────────
 export const shadows = {
   sm: {
-    shadowColor: '#000',
+    shadowColor: '#1A1208',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.06,
     shadowRadius: 4,
     elevation: 2,
   },
   md: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowColor: '#1A1208',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 4,
   },
   primary: {
-    shadowColor: '#FF6B35',
+    shadowColor: '#C74B2B',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.35,
     shadowRadius: 10,
@@ -112,7 +118,7 @@ export const Badge: React.FC<BadgeProps> = ({
   <View
     style={[
       badgeStyles.container,
-      { backgroundColor: color + '22' }, // 13% opacity
+      { backgroundColor: color + '22' },
       style,
     ]}
   >
@@ -132,4 +138,3 @@ const badgeStyles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 });
-

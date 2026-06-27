@@ -25,7 +25,7 @@ import {
   type Ingredient,
   type StepType,
 } from '../../lib/database';
-import { colors, typography, spacing, radii, shadows } from '../../lib/theme';
+import { colors, fonts, typography, spacing, radii, shadows } from '../../lib/theme';
 import { useAppAlert } from '../../lib/AppAlert';
 import { PlanningModal } from '../../lib/PlanningModal';
 import { formatQty } from '../../lib/ShoppingAdjustModal';
@@ -756,7 +756,7 @@ const styles = StyleSheet.create({
   timeBadgePrep: { borderColor: '#FF6B35', backgroundColor: '#FFF0EA' },
   timeBadgeCook: { borderColor: '#E53E3E', backgroundColor: '#FFF5F5' },
   timeText: { color: colors.textSecondary, fontWeight: typography.fontWeights.semiBold, fontSize: typography.fontSizes.sm },
-  title: { fontSize: 28, fontWeight: typography.fontWeights.extraBold, color: colors.textPrimary, marginBottom: spacing.lg, lineHeight: 34 },
+  title: { fontSize: 30, fontFamily: fonts.display, color: colors.textPrimary, marginBottom: spacing.lg, lineHeight: 38 },
   divider: { height: 1, backgroundColor: colors.border, marginVertical: spacing.xl },
   sectionLabel: {
     fontSize: typography.fontSizes.xs,
@@ -918,9 +918,9 @@ const editS = StyleSheet.create({
   // Titre
   titleInput: {
     fontSize: 28,
-    fontWeight: typography.fontWeights.extraBold,
+    fontFamily: fonts.display,
     color: colors.textPrimary,
-    lineHeight: 34,
+    lineHeight: 36,
     marginBottom: spacing.lg,
     borderBottomWidth: 2,
     borderBottomColor: colors.primary + '50',

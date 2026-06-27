@@ -8,7 +8,7 @@ export type { StepType, RecipeStep, Recipe, Ingredient, ShoppingItem, MealSlot, 
 
 // ─── Init ─────────────────────────────────────────────────────
 
-import type { Recipe, ShoppingItem, MealPlan, MealSlot } from './types';
+import type { Recipe, ShoppingItem, MealPlan, MealSlot, RoomTaskPriority } from './types';
 
 const STORAGE_KEY = 'cuisinator_recipes';
 const MEAL_PLANS_KEY = 'cuisinator_meal_plans';
@@ -278,6 +278,10 @@ export function updateRoomTaskShoppingItems(id: number, items: RoomShoppingItem[
   saveRoomTasks(loadRoomTasks().map((t) => t.id === id ? { ...t, shopping_items: JSON.stringify(items) } : t));
 }
 
+export function updateRoomTask(id: number, updates: { title: string; priority: RoomTaskPriority; note: string }): void {
+  saveRoomTasks(loadRoomTasks().map((t) => t.id === id ? { ...t, ...updates } : t));
+}
+
 export function deleteRoomTask(id: number): void {
   saveRoomTasks(loadRoomTasks().filter((t) => t.id !== id));
 }
@@ -306,6 +310,10 @@ export function getProjects(roomId: number): RoomProject[] {
 export function addProject(project: Omit<RoomProject, 'id'>): void {
   const projects = loadProjects();
   saveProjects([...projects, { ...project, id: nextProjectId(projects) }]);
+}
+
+export function updateProject(id: number, updates: { title: string; description: string }): void {
+  saveProjects(loadProjects().map((p) => p.id === id ? { ...p, ...updates } : p));
 }
 
 export function deleteProject(id: number): void {

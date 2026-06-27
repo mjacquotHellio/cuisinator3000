@@ -25,7 +25,7 @@ import {
   type RoomProject,
   type RoomShoppingItem,
 } from '../database';
-import { colors, typography, spacing, radii, shadows } from '../theme';
+import { colors, fonts, typography, spacing, radii, shadows } from '../theme';
 
 type TaskWithRoom = RoomTask & { room: Room };
 type ProjectWithRoom = RoomProject & { room: Room };
@@ -513,10 +513,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: colors.dark,
+    backgroundColor: colors.house,
     paddingHorizontal: spacing.xl,
     paddingBottom: spacing.xl,
     gap: spacing.md,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   headerRow: {
     flexDirection: 'row',
@@ -527,7 +529,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -535,25 +537,25 @@ const styles = StyleSheet.create({
   backBtnText: { fontSize: 20 },
   headerText: { flex: 1 },
   headerTitle: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 24,
+    fontFamily: fonts.display,
     color: colors.surface,
-    letterSpacing: -0.5,
+    lineHeight: 30,
   },
   headerSub: {
     fontSize: typography.fontSizes.sm,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
+    color: 'rgba(255,255,255,0.65)',
+    marginTop: 2,
   },
 
   dropdownBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
+    borderColor: 'rgba(255,255,255,0.2)',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm + 1,
   },
@@ -565,7 +567,7 @@ const styles = StyleSheet.create({
   },
   dropdownBtnArrow: {
     fontSize: 11,
-    color: colors.textSecondary,
+    color: 'rgba(255,255,255,0.7)',
     fontWeight: typography.fontWeights.bold,
   },
 
@@ -766,11 +768,10 @@ const detailStyles = StyleSheet.create({
   bodyContent: { padding: spacing.xl, gap: spacing.lg, paddingBottom: spacing.xxxxl },
 
   title: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 26,
+    fontFamily: fonts.display,
     color: colors.textPrimary,
-    letterSpacing: -0.4,
-    lineHeight: 30,
+    lineHeight: 34,
   },
 
   metaRow: {

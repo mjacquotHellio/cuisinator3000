@@ -25,7 +25,7 @@ import {
   getShoppingList,
   type Recipe,
 } from '../lib/database';
-import { colors, typography, spacing, radii, shadows, Badge } from '../lib/theme';
+import { colors, fonts, typography, spacing, radii, shadows, Badge } from '../lib/theme';
 import { TabBar, type TabDef } from '../lib/TabBar';
 import { CoursesPanel } from '../lib/panels/CoursesPanel';
 import { RecipesPanel } from '../lib/panels/RecipesPanel';
@@ -663,9 +663,11 @@ const styles = StyleSheet.create({
 
   // Header
   header: {
-    backgroundColor: colors.dark,
+    backgroundColor: colors.primary,
     paddingHorizontal: spacing.xl,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.xxxxl,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   headerTop: {
     flexDirection: 'row',
@@ -676,7 +678,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -691,40 +693,39 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerTitle: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 26,
+    fontFamily: fonts.display,
     color: colors.surface,
-    letterSpacing: -0.5,
   },
   headerSub: {
     fontSize: typography.fontSizes.sm,
-    color: colors.textSecondary,
+    color: 'rgba(255,255,255,0.65)',
     marginTop: spacing.xs,
   },
   headerBadge: {
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
     borderRadius: radii.full,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
   },
   headerBadgeActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: 'rgba(255,255,255,0.9)',
   },
   headerBadgeText: {
     fontSize: typography.fontSizes.sm,
     fontWeight: typography.fontWeights.bold,
-    color: colors.surface,
+    color: colors.primary,
   },
   progressBar: {
     height: 3,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: radii.full,
     marginTop: spacing.lg,
     overflow: 'hidden',
   },
   progressFill: {
     height: 3,
-    backgroundColor: colors.primary,
+    backgroundColor: 'rgba(255,255,255,0.85)',
     borderRadius: radii.full,
   },
   body: { flex: 1 },
@@ -732,7 +733,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: spacing.xs,
+    gap: 6,
     paddingVertical: spacing.md,
     backgroundColor: colors.background,
   },
@@ -743,14 +744,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.border,
   },
   dotActive: {
-    width: 18,
+    width: 20,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: colors.textSecondary,
   },
   dotToday: {
-    backgroundColor: colors.primary + '55',
+    backgroundColor: colors.primary + '44',
   },
   dotTodayActive: {
-    width: 18,
+    width: 20,
     backgroundColor: colors.primary,
   },
 
@@ -762,12 +765,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: spacing.xxl,
   },
-  dayLabelBlock: { gap: spacing.xs },
+  dayLabelBlock: { gap: 2 },
   dayMain: {
-    fontSize: 34,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 36,
+    fontFamily: fonts.display,
     color: colors.textPrimary,
-    letterSpacing: -0.5,
+    lineHeight: 44,
   },
   dayMainToday: {
     color: colors.primary,
@@ -782,7 +785,7 @@ const styles = StyleSheet.create({
   slotsContainer: { gap: spacing.lg },
   slot: {
     backgroundColor: colors.surface,
-    borderRadius: radii.xl,
+    borderRadius: radii.xxl,
     padding: spacing.xl,
     gap: spacing.lg,
     ...shadows.md,
@@ -791,14 +794,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
+    paddingBottom: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
-  slotIcon: { fontSize: 20 },
+  slotIcon: { fontSize: 18 },
   slotLabel: {
-    fontSize: typography.fontSizes.sm,
+    fontSize: typography.fontSizes.xs,
     fontWeight: typography.fontWeights.bold,
     color: colors.textSecondary,
     textTransform: 'uppercase',
-    letterSpacing: 0.8,
+    letterSpacing: 1.2,
   },
 
   // Recette assignée
@@ -813,35 +819,40 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.background,
     borderRadius: radii.lg,
-    padding: spacing.lg,
+    padding: spacing.md + 2,
+    paddingLeft: spacing.lg,
     gap: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   recipeCardBody: { flex: 1 },
   recipeTitle: {
-    fontSize: typography.fontSizes.xl,
-    fontWeight: typography.fontWeights.bold,
+    fontSize: typography.fontSizes.lg,
+    fontFamily: fonts.display,
     color: colors.textPrimary,
+    lineHeight: 22,
   },
   recipeMeta: {
     fontSize: typography.fontSizes.sm,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
+    marginTop: 2,
   },
   recipeChevron: {
-    fontSize: 26,
+    fontSize: 24,
     color: colors.textSecondary,
+    lineHeight: 28,
   },
   clearBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     backgroundColor: '#FEE2E2',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
   clearBtnText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#DC2626',
     fontWeight: typography.fontWeights.bold,
   },
@@ -879,22 +890,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    backgroundColor: colors.background,
+    backgroundColor: colors.primaryLight,
     borderRadius: radii.lg,
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderWidth: 1.5,
-    borderColor: colors.border,
+    borderColor: colors.primary + '55',
     borderStyle: 'dashed',
   },
   addSlotIcon: {
-    fontSize: 18,
+    fontSize: 16,
     color: colors.primary,
     fontWeight: typography.fontWeights.bold,
   },
   addSlotText: {
     fontSize: typography.fontSizes.sm,
-    color: colors.textSecondary,
+    color: colors.primary,
     fontWeight: typography.fontWeights.medium,
   },
 });
@@ -913,11 +924,11 @@ const picker = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.xl,
     paddingBottom: spacing.lg,
-    backgroundColor: colors.dark,
+    backgroundColor: colors.primary,
   },
   title: {
-    fontSize: typography.fontSizes.xl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 22,
+    fontFamily: fonts.display,
     color: colors.surface,
   },
   closeBtn: {

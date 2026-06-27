@@ -3,16 +3,17 @@ import {
   View,
   Text,
   Modal,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   TextInput,
   StyleSheet,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   getProjectTasks,
   addRoomTask,
+  updateRoomTask,
   updateRoomTaskStatus,
   updateRoomTaskShoppingItems,
   deleteRoomTask,
@@ -23,7 +24,7 @@ import {
   type RoomTaskPriority,
   type RoomShoppingItem,
 } from './database';
-import { colors, typography, spacing, radii, shadows } from './theme';
+import { colors, fonts, typography, spacing, radii, shadows } from './theme';
 
 // ─── Config ───────────────────────────────────────────────────
 
@@ -41,43 +42,25 @@ const STATUS_ICONS: Record<RoomTaskStatus, string> = {
   done:        '✓',
 };
 
-// ─── Formulaire d'ajout ───────────────────────────────────────
+// ─── Formulaire d'ajout / édition ─────────────────────────────
 
-interface AddTaskFormProps {
-  roomId: number;
-  projectId: number;
+interface TaskFormProps {
   roomColor: string;
-  onSaved: () => void;
+  initialTitle?: string;
+  initialPriority?: RoomTaskPriority;
+  initialNote?: string;
+  submitLabel: string;
+  onSave: (title: string, priority: RoomTaskPriority, note: string) => void;
   onCancel: () => void;
 }
 
-function AddTaskForm({ roomId, projectId, roomColor, onSaved, onCancel }: AddTaskFormProps) {
-  const [title, setTitle] = useState('');
-  const [priority, setPriority] = useState<RoomTaskPriority>('normal');
-  const [note, setNote] = useState('');
-
-  function handleSave() {
-    if (!title.trim()) return;
-    addRoomTask({
-      room_id: roomId,
-      project_id: projectId,
-      title: title.trim(),
-      type: 'Travaux',
-      status: 'todo',
-      priority,
-      note: note.trim(),
-      shopping_items: '[]',
-      created_at: new Date().toISOString(),
-    });
-    onSaved();
-  }
+function TaskForm({ roomColor, initialTitle = '', initialPriority = 'normal', initialNote = '', submitLabel, onSave, onCancel }: TaskFormProps) {
+  const [title, setTitle] = useState(initialTitle);
+  const [priority, setPriority] = useState<RoomTaskPriority>(initialPriority);
+  const [note, setNote] = useState(initialNote);
 
   return (
     <View style={formStyles.root}>
-      <View style={formStyles.header}>
-        <Text style={formStyles.title}>Nouvelle tâche</Text>
-      </View>
-
       <TextInput
         style={formStyles.titleInput}
         placeholder="Décrire la tâche..."
@@ -106,7 +89,7 @@ function AddTaskForm({ roomId, projectId, roomColor, onSaved, onCancel }: AddTas
         })}
       </View>
 
-      <Text style={formStyles.label}>Note (optionnel)</Text>
+      <Text style={formStyles.label}>Description (optionnel)</Text>
       <TextInput
         style={formStyles.noteInput}
         placeholder="Détails, dimensions, références..."
@@ -123,10 +106,10 @@ function AddTaskForm({ roomId, projectId, roomColor, onSaved, onCancel }: AddTas
         </TouchableOpacity>
         <TouchableOpacity
           style={[formStyles.saveBtn, { backgroundColor: roomColor }, !title.trim() && formStyles.saveBtnDisabled]}
-          onPress={handleSave}
+          onPress={() => title.trim() && onSave(title.trim(), priority, note.trim())}
           disabled={!title.trim()}
         >
-          <Text style={formStyles.saveText}>Ajouter</Text>
+          <Text style={formStyles.saveText}>{submitLabel}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -225,15 +208,23 @@ interface TaskCardProps {
   onStatusChange: (id: number, status: RoomTaskStatus) => void;
   onDelete: (id: number) => void;
   onShoppingUpdate: () => void;
+  onEdited: () => void;
 }
 
-function TaskCard({ task, roomColor, expanded, onToggleExpand, onStatusChange, onDelete, onShoppingUpdate }: TaskCardProps) {
+function TaskCard({ task, roomColor, expanded, onToggleExpand, onStatusChange, onDelete, onShoppingUpdate, onEdited }: TaskCardProps) {
+  const [editing, setEditing] = useState(false);
   const priorityCfg = PRIORITY_CONFIG[task.priority];
   const currentIdx = STATUS_ORDER.indexOf(task.status);
   const nextStatus = STATUS_ORDER[(currentIdx + 1) % STATUS_ORDER.length];
   const isDone = task.status === 'done';
   const shopItems: RoomShoppingItem[] = JSON.parse(task.shopping_items || '[]');
   const shopRemaining = shopItems.filter((i) => !i.done).length;
+
+  function handleSaveEdit(title: string, priority: RoomTaskPriority, note: string) {
+    updateRoomTask(task.id, { title, priority, note });
+    setEditing(false);
+    onEdited();
+  }
 
   return (
     <View style={[taskStyles.card, isDone && taskStyles.cardDone]}>
@@ -273,8 +264,25 @@ function TaskCard({ task, roomColor, expanded, onToggleExpand, onStatusChange, o
 
       {expanded && (
         <View style={taskStyles.expandedSection}>
-          {task.note ? <Text style={taskStyles.noteExpanded}>{task.note}</Text> : null}
-          <ShoppingSection task={task} roomColor={roomColor} onUpdate={onShoppingUpdate} />
+          {editing ? (
+            <TaskForm
+              roomColor={roomColor}
+              initialTitle={task.title}
+              initialPriority={task.priority}
+              initialNote={task.note || ''}
+              submitLabel="Sauvegarder"
+              onSave={handleSaveEdit}
+              onCancel={() => setEditing(false)}
+            />
+          ) : (
+            <>
+              <TouchableOpacity style={taskStyles.editBtn} onPress={() => setEditing(true)}>
+                <Text style={taskStyles.editBtnText}>✎ Modifier</Text>
+              </TouchableOpacity>
+              {task.note ? <Text style={taskStyles.noteExpanded}>{task.note}</Text> : null}
+              <ShoppingSection task={task} roomColor={roomColor} onUpdate={onShoppingUpdate} />
+            </>
+          )}
         </View>
       )}
     </View>
@@ -326,6 +334,22 @@ export function ProjectDetailModal({ visible, project, room, onClose, onGotoBoar
         }
       },
     ]);
+  }
+
+  function handleAddTask(title: string, priority: RoomTaskPriority, note: string) {
+    addRoomTask({
+      room_id: project.room_id,
+      project_id: project.id,
+      title,
+      type: 'Travaux',
+      status: 'todo',
+      priority,
+      note,
+      shopping_items: '[]',
+      created_at: new Date().toISOString(),
+    });
+    setShowForm(false);
+    loadTasks();
   }
 
   const filtered = activeFilter === 'all' ? tasks : tasks.filter((t) => t.status === activeFilter);
@@ -398,11 +422,10 @@ export function ProjectDetailModal({ visible, project, room, onClose, onGotoBoar
         {/* Liste */}
         <ScrollView style={modalStyles.body} contentContainerStyle={modalStyles.list} showsVerticalScrollIndicator={false}>
           {showForm && (
-            <AddTaskForm
-              roomId={project.room_id}
-              projectId={project.id}
+            <TaskForm
               roomColor={room.color}
-              onSaved={() => { setShowForm(false); loadTasks(); }}
+              submitLabel="Ajouter"
+              onSave={handleAddTask}
               onCancel={() => setShowForm(false)}
             />
           )}
@@ -423,6 +446,7 @@ export function ProjectDetailModal({ visible, project, room, onClose, onGotoBoar
                 onStatusChange={handleStatusChange}
                 onDelete={handleDelete}
                 onShoppingUpdate={loadTasks}
+                onEdited={loadTasks}
               />
             ))
           )}
@@ -458,10 +482,12 @@ const modalStyles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   header: {
     paddingTop: spacing.lg,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.xxxxl,
     paddingHorizontal: spacing.xl,
     flexDirection: 'row',
     alignItems: 'flex-start',
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
   },
   backBtn: { paddingTop: spacing.xs, width: 60 },
   backText: {
@@ -477,10 +503,10 @@ const modalStyles = StyleSheet.create({
     fontWeight: typography.fontWeights.medium,
   },
   headerTitle: {
-    fontSize: typography.fontSizes.xxl,
-    fontWeight: typography.fontWeights.extraBold,
+    fontSize: 24,
+    fontFamily: fonts.display,
     color: colors.surface,
-    letterSpacing: -0.3,
+    lineHeight: 30,
     textAlign: 'center',
   },
   headerDesc: {
@@ -589,6 +615,20 @@ const taskStyles = StyleSheet.create({
     borderTopWidth: 1, borderTopColor: colors.border,
     padding: spacing.md, gap: spacing.md, backgroundColor: colors.background + 'CC',
   },
+  editBtn: {
+    alignSelf: 'flex-end',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: radii.full,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  editBtnText: {
+    fontSize: typography.fontSizes.sm,
+    color: colors.textSecondary,
+    fontWeight: typography.fontWeights.medium,
+  },
   noteExpanded: {
     fontSize: typography.fontSizes.sm,
     color: colors.textSecondary,
@@ -630,12 +670,6 @@ const formStyles = StyleSheet.create({
     gap: spacing.md,
     ...shadows.md,
     marginBottom: spacing.sm,
-  },
-  header: { borderBottomWidth: 1, borderBottomColor: colors.border, paddingBottom: spacing.md },
-  title: {
-    fontSize: typography.fontSizes.lg,
-    fontWeight: typography.fontWeights.bold,
-    color: colors.textPrimary,
   },
   titleInput: {
     backgroundColor: colors.background, borderRadius: radii.md,
